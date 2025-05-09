@@ -1,3 +1,5 @@
+import os
+
 accounts={}
 next_account_number=10000
 next_customer_id=1
@@ -11,7 +13,6 @@ def is_file_empty(filename):
         return data ==""
     except:
         return True
-
     
 def admin_signup():
     print("\n---Admin Sign-Up---")
@@ -70,22 +71,41 @@ def generate_customer_id():
 
 def create_account():
     name=input("enter account holder name:")
+    address=input("enter address:")
+    email=input("enter email address:")
+    username=input("create a username:")
+    password=input("create a password:")
     balance=input("enter  initial balance:")
+
     if not is_valid_number(balance):
         print("invalid balance.")
         return
-    account_no=generate_account_number
-    cus_id=generate_customer_id
+    account_no=generate_account_number()
+    cus_id=generate_customer_id()
     accounts[account_no]={
         'customer_id':cus_id,
         'name':name,
+        'address':address,
+        'email_address':email,
+        'username':username,
+        'password':password,
         'balance':float(balance),
-        'transaction':[f"Account created with balance{balance}"]
+        'transaction':[]
     }
     print("Account created successfully.")
     print("Account number:",account_no)
     print("Customer ID:",cus_id)
+
+    save_user_credentials(cus_id,username,password)
+
     append_account_to_file(account_no,accounts[account_no])
+
+def save_user_credentials(cus_id,username,password):
+    try:
+        with open("user_credentials.txt","a") as file:
+            file.write(f"{cus_id}|{username}|{password}\n")
+    except:
+        print("error writing user credentials to file")
 
 def deposit():
     account=input("Enter Account Number:")
@@ -97,7 +117,10 @@ def deposit():
         print("invalid amount.")
         return
     amounts=float(amount)
-    accounts[account]['balance']+=accounts[account]['transaction'].append(f"deposited{amount}")
+    accounts[account]['balance']+=amounts
+    if "transaction" not in accounts[account]:
+        accounts[account_no]["transaction"]=[]
+    accounts[account]['transaction'].append(f"deposited{amounts}")
     print("deposit successfully.")
 
 def withdraw():
@@ -113,22 +136,22 @@ def withdraw():
     if amounts>accounts[account]['balance']:
         print("insufficient balance.")
         return
-    accounts[account]['balance']-=amount
+    accounts[account]['balance']-=amounts
     accounts[account]['transaction'].append(f"withdrew{amount}")
     print("withdrawal successfully.")
 
 def check_balance():
     account=input("enter account number:")
     if account in accounts:
-        print("corrent balance:",account[account]['balance'])
+        print("corrent balance:",accounts[account]['balance'])
     else:
         print("account not found.")
 
 def transaction_history():
     account=input("enter account number:")
     if account in accounts:
-        print("transction history")
-        for t in accounts[account]['transactions']:
+        print("transaction history")
+        for t in accounts[account]['transaction']:
             print("-",t)
     else:
         print("account not fount")
@@ -146,22 +169,22 @@ def customer_info():
         print("transaction:")
         for t in info['transaction']:
             print("-",t)
-        else:
-            print("account not found.")
+    else:
+        print("account not found.")
 def append_account_to_file(account_no,info):
     try:
         file=open("bank_data.txt","a")
         line=account_no +"|"+info['customer_id']+"|"+info['name']+"|"+str(info['balance'])+"|"+",".join(info['transactions'])+"\n"
-        file.write(line)
+        file.write(lines)
         file.close()
     except:
-        print("error writting to file.")
+        print("successfully writing file.")
 
 def save_all_data():
     try:
         file=open("bank_data.txt","w")
         for account_no,info in accounts.items():
-             line=account_no +"|"+info['customer_id']+"|"+info['name']+"|"+str(info['balance'])+"|"+",".join(info['transactions'])+"\n"
+             line=account_no +"|"+info['customer_id']+"|"+info['name']+"|"+str(info['balance'])+"|"+",".join(info['transaction'])+"\n"
         file.write(line)
         file.close()
     except:
@@ -172,14 +195,14 @@ def load_data():
     try:
         file=open("bank_data.txt","r")
         lines=file.readlines()
-        file.close
+        file.close()
         for line in lines:
             parts=line.strip().split("|")
             if len(parts) < 5:
                 continue
             account_no=parts[0]
             accounts[account_no]={
-                'custumer_id':parts[1],
+                'customer_id':parts[1],
                 'name':parts[2],
                 'balance':float(parts[3]),
                 'transactions':parts[4].split(",")
@@ -200,7 +223,7 @@ def menu():
         print("1.Creat Account")
         print("2.Deposit")
         print("3.Withdraw")
-        print("4.Cheak Balance")
+        print("4.Check Balance")
         print("5.Transaction History")
         print("6.Customer Info")
         print("7.Exit")
