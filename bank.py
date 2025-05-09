@@ -175,7 +175,7 @@ def append_account_to_file(account_no,info):
     try:
         file=open("bank_data.txt","a")
         line=account_no +"|"+info['customer_id']+"|"+info['name']+"|"+str(info['balance'])+"|"+",".join(info['transactions'])+"\n"
-        file.write(lines)
+        file.write(line+"\n")
         file.close()
     except:
         print("successfully writing file.")
@@ -209,7 +209,7 @@ def load_data():
             }
             if int(account_no) >= next_account_number:
                 next_account_number=int(account_no)+1
-            num=parts[1][4:]
+            num=parts[1].replace("CUSTOMER","")
             if num.isdigit() and int(num)>=next_customer_id:
                 next_customer_id=int(num)+1
     except:

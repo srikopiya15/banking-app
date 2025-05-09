@@ -1,0 +1,1 @@
+10001|CUSTOMER2|vaishu|1900.0|deposited500.0,withdrew100
