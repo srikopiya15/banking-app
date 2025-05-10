@@ -1,1 +1,3 @@
-10000|CUSTOMER1|sri|5500.0|deposited1000.0,withdrew500
+10000|CUSTOMER1|vaishu|5500.0|deposited1000.0,withdrew500
+10001|CUSTOMER2|nila|2500.0|deposited1000.0,withdrew500
+10002|CUSTOMER3|akee|1500.0|deposited1000.0,withdrew500
