@@ -1,0 +1,1 @@
+10000|CUSTOMER1|sri|5500.0|deposited1000.0,withdrew500

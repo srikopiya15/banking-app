@@ -5,15 +5,17 @@ next_account_number=10000
 next_customer_id=1
 
 
-def is_file_empty(filename):
+def is_file_empty():
     try:
-        file=open(filename,"r")
+        file=open("r")
         data=file.read().strip()
         file.close()
         return data ==""
     except:
         return True
-    
+
+is_file_empty()
+
 def admin_signup():
     print("\n---Admin Sign-Up---")
     username=input("Create admin username:")
@@ -22,6 +24,8 @@ def admin_signup():
     file.write(username +"\n"+ password)
     file.close()
     print("Admin registered successfully.\n")
+
+admin_signup()
 
 def admin_login():
     print("\n---Admin login---")
@@ -34,8 +38,8 @@ def admin_login():
             return False
         saved_user=lines[0].strip()
         saved_pass=lines[1].strip()
-        username=input("Create admin username:")
-        password=input("Create admin password:")
+        username=input("enter admin username:")
+        password=input("enter admin password:")
         if username==saved_user and password==saved_pass:
             print("login successful!\n")
             return True
@@ -46,6 +50,8 @@ def admin_login():
             print("Error reading admin file.")
             return False
     
+admin_login()
+
 def is_valid_number(text):
     dot=0
     for c in text:
@@ -119,7 +125,7 @@ def deposit():
     amounts=float(amount)
     accounts[account]['balance']+=amounts
     if "transaction" not in accounts[account]:
-        accounts[account_no]["transaction"]=[]
+        accounts[account]["transaction"]=[]
     accounts[account]['transaction'].append(f"deposited{amounts}")
     print("deposit successfully.")
 
@@ -180,6 +186,7 @@ def append_account_to_file(account_no,info):
     except:
         print("successfully writing file.")
 
+
 def save_all_data():
     try:
         file=open("bank_data.txt","w")
@@ -215,7 +222,7 @@ def load_data():
     except:
         pass
 
-
+load_data()
 
 def menu():
     while True:
@@ -247,9 +254,6 @@ def menu():
         else:
             print("Invalid Choice.")
 menu()
-            
-
-
 
 
 
